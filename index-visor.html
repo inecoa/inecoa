@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>VISOR AMBIENTAL - INECOA - CONICET - UNJu - Argentina</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="images/conicet-icono.ico" /> 
+	
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>    
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+    <!-- Load Leaflet: http://leafletjs.com/ -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
+
+    <!-- Esri Leaflet Plugin: https://esri.github.io/esri-leaflet/ -->
+    <script src="https://unpkg.com/esri-leaflet@2.1.3/dist/esri-leaflet.js" integrity="sha512-pijLQd2FbV/7+Jwa86Mk3ACxnasfIMzJRrIlVQsuPKPCfUBCDMDUoLiBQRg7dAQY6D1rkmCcR8286hVTn/wlIg==" crossorigin=""></script>
+
+    <!-- ESRI Renderer Plugin: https://github.com/Esri/esri-leaflet-renderers -->
+    <!-- Renders feature layer using default symbology as defined by ArcGIS REST service -->
+    <!-- Currently doesn't work with ESRI cluster plugin -->
+    <script src="https://unpkg.com/esri-leaflet-renderers@2.0.6/dist/esri-leaflet-renderers.js" integrity="sha512-mhpdD3igvv7A/84hueuHzV0NIKFHmp2IvWnY5tIdtAHkHF36yySdstEVI11JZCmSY4TCvOkgEoW+zcV/rUfo0A==" crossorigin=""></script>
+
+    <!-- Load Leaflet Basemap Providers: https://github.com/leaflet-extras/leaflet-providers -->
+    <!-- Modified to include USGS TNM web services -->
+    <script src="JS/leaflet-providers.js"></script>
+
+    <!-- 2.5D OSM Buildings Classic: https://github.com/kekscom/osmbuildings -->
+    <script src="https://cdn.osmbuildings.org/OSMBuildings-Leaflet.js"></script>
+
+    <!-- Load Font Awesome icons -->
+    <script src="https://use.fontawesome.com/a64989e3a8.js"></script>
+
+    <!-- Grouped Layer Plugin: https://github.com/ismyrnow/leaflet-groupedlayercontrol  -->
+    <link rel="stylesheet" href="CSS/leaflet.groupedlayercontrol.min.css">
+    <script src="JS/leaflet.groupedlayercontrol.min.js" type="text/javascript"></script>
+
+    <!-- Overview mini map Plugin: https://github.com/Norkart/Leaflet-MiniMap -->
+    <link rel="stylesheet" href="CSS/Control.MiniMap.css">
+    <script src="JS/Control.MiniMap.min.js" type="text/javascript"></script>
+
+    <!-- Leaflet Drawing Plugin: https://github.com/codeofsumit/leaflet.pm -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.pm@latest/dist/leaflet.pm.css">
+    <script src="https://unpkg.com/leaflet.pm@latest/dist/leaflet.pm.min.js"></script>
+
+    <!-- Leaflet WMS Plugin: https://github.com/heigeo/leaflet.wms -->
+    <script src="JS/leaflet.wms.js"></script>
+
+    <!-- Logo Credit Plugin: https://github.com/gregallensworth/L.Control.Credits -->
+    <link rel="stylesheet" href="CSS/leaflet-control-credits.css" />
+    <script type="text/javascript" src="JS/leaflet-control-credits.js"></script>
+	
+	<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.1.0/dist/MarkerCluster.css" />
+	<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.1.0/dist/MarkerCluster.Default.css" />
+	<script src="https://unpkg.com/leaflet.markercluster@1.1.0/dist/leaflet.markercluster.js"></script>
+	
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+	
+	<!-- Include Fuse.js for fuzzy search : http://kiro.me/projects/fuse.html -->
+	<script src="fusesearch/fuse.js"></script>
+	<script src="fusesearch/leaflet.fusesearch.js"></script>
+	<link rel="stylesheet" href="fusesearch/leaflet.fusesearch.css" />
+	
+	<!--- Mapa de Calor --->
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script src="JS/leaflet.heat.js"></script>
+	
+	<!--- Zoom Control + Home Control --->	
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="JS/leaflet.zoomhome.css"/>
+	<script src="JS/leaflet.zoomhome.min.js"></script>
+	
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        html,
+        body,
+        #map {
+        width: 100%;
+        height: 100%;
+        border: 1px solid black;
+        z-index: 0;
+      }
+	  
+		.awesome-marker i {
+				font-size: 14px;
+				margin-top: 8px;
+			}
+
+    </style>
+	
+	<link rel="stylesheet" href="ionicons.min.css">
+    <link rel="stylesheet" href="leaflet.awesome-markers.css">	
+	<script src="leaflet.awesome-markers.js"></script>
+	
+	<script src="biotavertebrados.js"></script>
+	<script src="biotainvertebrados.js"></script>
+	<script src="biotaprotistas.js"></script>
+	<script src="biotahongos.js"></script>
+	<script src="biotaplantas.js"></script>
+
+</head>
+
+<body>
+	
+	<div id="map"></div>
+
+    <script>
+	
+		var url_jujuy = 'jujuy-provincia-limites.geojson';  // my GeoJSON data source, in same folder as my html page.
+	
+		var url_puna = 'jujuy-subeco-puna.geojson';  // my GeoJSON data source, in same folder as my html page.
+		
+		var url_andes = 'jujuy-subeco-altoandes.geojson';  // my GeoJSON data source, in same folder as my html page.
+		
+		var url_yungas = 'jujuy-subeco-yungas.geojson';  // my GeoJSON data source, in same folder as my html page.
+		
+		var url_chacos = 'jujuy-subeco-chacoseco.geojson';  // my GeoJSON data source, in same folder as my html page.
+		
+		var url_msb = 'jujuy-subeco-msb.geojson';  // my GeoJSON data source, in same folder as my html page.
+		
+        var map = L.map('map', {
+            center: [-23.1871496, -65.2086225], // Provincia de Jujuy, JJYAR
+            zoom: 8,
+			zoomControl: false
+        });
+				
+		//Barra Control ZOOM + HOME
+		
+		var zoomHome = L.Control.zoomHome({position: 'topleft', 
+											zoomHomeTitle: 'Incio',
+											zoomInTitle: 'Acercarse',
+											zoomOutTitle: 'Alejarse'
+			});
+			zoomHome.addTo(map);
+
+        var defaultBase = L.tileLayer.provider('OpenTopoMap').addTo(map);
+				
+					
+		//Menus Mapas Base - Ecorregiones - Categorias - SubCategorias
+
+		var baseLayers = {
+			'MAPA Topografico: OSM Topo': defaultBase,
+            
+			'MAPA General: Open Street Map': L.tileLayer.provider('OpenStreetMap'),
+            
+			'MAPA Satelital: ESRI Imagery': L.tileLayer.provider('Esri.WorldImagery') 
+
+			};
+	
+	//--------------------- BIOTA VERTEBRADOS -----------------------------------------------------
+	
+		var biotavertebrados = L.geoJson(biotavertebrados,{
+			onEachFeature: function(feature, layer){
+				layer.bindPopup("<b>Punto : </b>" + feature.properties["punto"] + '<br>' +
+				"<b>TITULO : </b>" + feature.properties["titulo"] + '<br>' +
+				"<b>DESCRIPCION : </b>" + feature.properties["descripcion"] + '<br>' +
+				"<b>INSTITUCION : </b>" + feature.properties["institucion"] + '<br>' +
+				"<b>ECORREGION : </b>" + feature.properties["ecorregion"] + '<br>' +
+				"<b>FUENTE : </b>" + feature.properties["fuente"] + '<br>'+
+				"<b>ALTURA : </b>" + feature.properties["altura"] + '<br>' +
+				"<b>WEB : </b>" + '<a href="' + feature.properties["url"] + '">' + feature.properties["url"])
+				}
+			});
+			
+			//<a href="http://www.lillo.org.ar/revis/lilloa/2017/v54n2/lilloa-v54n2a11.pdf"> http://www.lillo.org.ar/revis/lilloa/2017/v54n2/lilloa-v54n2a11.pdf</a>
+			
+		var MCBiotaVertebrados = L.markerClusterGroup();
+			MCBiotaVertebrados.addLayer(biotavertebrados);
+			
+	//--------------------- BIOTA INVERTEBRADOS -----------------------------------------------------
+	
+		var biotainvertebrados = L.geoJson(biotainvertebrados,{
+			onEachFeature: function(feature, layer){
+				layer.bindPopup("<b>Punto : </b>" + feature.properties["punto"] + '<br>' +
+				"<b>TITULO : </b>" + feature.properties["titulo"] + '<br>' +
+				"<b>DESCRIPCION : </b>" + feature.properties["descripcion"] + '<br>' +
+				"<b>INSTITUCION : </b>" + feature.properties["institucion"] + '<br>' +
+				"<b>ECORREGION : </b>" + feature.properties["ecorregion"] + '<br>' +
+				"<b>FUENTE : </b>" + feature.properties["fuente"] + '<br>'+
+				"<b>ALTURA : </b>" + feature.properties["altura"] + '<br>' +
+				"<b>WEB : </b>" + '<a href="' + feature.properties["url"] + '">' + feature.properties["url"])
+				}
+			});
+			
+			//<a href="http://www.lillo.org.ar/revis/lilloa/2017/v54n2/lilloa-v54n2a11.pdf"> http://www.lillo.org.ar/revis/lilloa/2017/v54n2/lilloa-v54n2a11.pdf</a>
+			
+		var MCBiotaINVertebrados = L.markerClusterGroup();
+			MCBiotaINVertebrados.addLayer(biotainvertebrados);
+			
+	//--------------------- BIOTA PROTISTAS -----------------------------------------------------
+	
+		var biotaprotistas = L.geoJson(biotaprotistas,{
+			onEachFeature: function(feature, layer){
+				layer.bindPopup("<b>Punto : </b>" + feature.properties["punto"] + '<br>' +
+				"<b>TITULO : </b>" + feature.properties["titulo"] + '<br>' +
+				"<b>DESCRIPCION : </b>" + feature.properties["descripcion"] + '<br>' +
+				"<b>INSTITUCION : </b>" + feature.properties["institucion"] + '<br>' +
+				"<b>ECORREGION : </b>" + feature.properties["ecorregion"] + '<br>' +
+				"<b>FUENTE : </b>" + feature.properties["fuente"] + '<br>'+
+				"<b>ALTURA : </b>" + feature.properties["altura"] + '<br>' +
+				"<b>WEB : </b>" + '<a href="' + feature.properties["url"] + '">' + feature.properties["url"])
+				}
+			});
+			
+			//<a href="http://www.lillo.org.ar/revis/lilloa/2017/v54n2/lilloa-v54n2a11.pdf"> http://www.lillo.org.ar/revis/lilloa/2017/v54n2/lilloa-v54n2a11.pdf</a>
+			
+		var MCBiotaProtistas = L.markerClusterGroup();
+			MCBiotaProtistas.addLayer(biotaprotistas);
+			
+	//--------------------- BIOTA HONGOS -----------------------------------------------------
+	
+		var biotahongos = L.geoJson(biotahongos,{
+			onEachFeature: function(feature, layer){
+				layer.bindPopup("<b>Punto : </b>" + feature.properties["punto"] + '<br>' +
+				"<b>TITULO : </b>" + feature.properties["titulo"] + '<br>' +
+				"<b>DESCRIPCION : </b>" + feature.properties["descripcion"] + '<br>' +
+				"<b>INSTITUCION : </b>" + feature.properties["institucion"] + '<br>' +
+				"<b>ECORREGION : </b>" + feature.properties["ecorregion"] + '<br>' +
+				"<b>FUENTE : </b>" + feature.properties["fuente"] + '<br>'+
+				"<b>ALTURA : </b>" + feature.properties["altura"] + '<br>' +
+				"<b>WEB : </b>" + '<a href="' + feature.properties["url"] + '">' + feature.properties["url"])
+				}
+			});
+			
+			//<a href="http://www.lillo.org.ar/revis/lilloa/2017/v54n2/lilloa-v54n2a11.pdf"> http://www.lillo.org.ar/revis/lilloa/2017/v54n2/lilloa-v54n2a11.pdf</a>
+			
+		var MCBiotaHongos = L.markerClusterGroup();
+			MCBiotaHongos.addLayer(biotahongos);
+			
+	//------------------- ICONOS Definicion Variedades de Tipo
+
+		var marcadorPlantas = L.AwesomeMarkers.icon({
+			icon: 'school',
+			iconColor: 'green',
+			prefix:'fa',
+			markerColor: 'gray'					
+		});
+				
+		//L.marker([-31.6333294, -60.6900008], {icon:marcadorEscuelas}).addTo(map);						
+			
+	//--------------------- BIOTA PLANTAS -----------------------------------------------------
+	
+		var biotaplantas = L.geoJson(biotaplantas,{
+			onEachFeature: function(feature, layer){
+				layer.bindPopup("<b>Punto : </b>" + feature.properties["punto"] + '<br>' +
+				"<b>TITULO : </b>" + feature.properties["titulo"] + '<br>' +
+				"<b>DESCRIPCION : </b>" + feature.properties["descripcion"] + '<br>' +
+				"<b>INSTITUCION : </b>" + feature.properties["institucion"] + '<br>' +
+				"<b>ECORREGION : </b>" + feature.properties["ecorregion"] + '<br>' +
+				"<b>FUENTE : </b>" + feature.properties["fuente"] + '<br>'+
+				"<b>ALTURA : </b>" + feature.properties["altura"] + '<br>' +
+				"<b>WEB : </b>" + '<a href="' + feature.properties["url"] + '">' + feature.properties["url"])
+				}
+			});
+			
+			//<a href="http://www.lillo.org.ar/revis/lilloa/2017/v54n2/lilloa-v54n2a11.pdf"> http://www.lillo.org.ar/revis/lilloa/2017/v54n2/lilloa-v54n2a11.pdf</a>
+			
+		var MCBiotaPlantas = L.markerClusterGroup();
+			MCBiotaPlantas.addLayer(biotaplantas);
+			
+			
+		var heatverte = L.heatLayer([
+					[-22.9015, -66.33472, 27], // lat, lng, intensity
+					[-24.013560000000002,-66.51467,25],
+					[-23.665429999999997,-65.29862,35],
+					[-23.6628,-65.33548,45],
+					[-23.6584,-65.32802,23],
+					[-23.473979999999997,-66.79330999999999,33],
+					[-23.403000000000002,-66.51335999999999,66],
+					[-23.38714,-66.54439,34],
+					[-23.26878,-66.4568,23],
+					[-23.20198,-66.83024,15],
+					[-23.14442,-66.40833,46],
+					[-23.1275,-65.20306,56],
+					[-22.930229999999998,-66.31246999999999,43],
+					[-22.9015,-66.33471999999999,23],
+					[-22.88597,-65.24733,33],
+					[-22.85031,-65.29615,46],
+					[-24.03902,-66.52587,45],
+					[-23.69866,-65.65711999999999,32],
+					[-24.01783,-65.78198,43],
+					[-24.00864,-65.78856,35],
+					[-22.57798,-66.8428,36],
+					[-24.54489,-64.89394,54],
+					[-24.53135,-65.07698,32],
+					[-24.50215,-64.99305,23],
+					[-24.17888,-64.67739,55],
+					[-24.102439999999998,-64.55414,23],
+					[-23.976760000000002,-64.30816999999999,25],
+					[-23.67729,-64.44338,35],
+					[-24.06758,-66.82679,45],
+					[-23.845760000000002,-66.79643,23],
+					[-23.7,-65.7,33],
+					[-23.68761,-65.70008,66],
+					[-23.53071,-66.63984,34],
+					[-23.4002,-66.3705,23],
+					[-23.39326,-65.78801999999999,15],
+					[-23.3288,-66.59763000000001,46],
+					[-23.2925,-65.24648,56],
+					[-23.2042,-65.24036,43],
+					[-23.20111,-65.23306,23],
+					[-22.99426,-66.00733000000001,33],
+					[-22.9471,-65.50990999999999,46],
+					[-22.91841,-65.58954,45],
+					[-22.84381,-65.68417,32],
+					[-22.1283,-65.46616,43],
+					[-24.30356,-65.41684000000001,35],
+					[-24.30326,-65.28782,36],
+					[-24.28981,-65.09889,54],
+					[-24.282610000000002,-65.10293,32],
+					[-24.27532,-65.4097,23],
+					[-24.2745,-65.41403000000001,55],
+					[-24.274379999999997,-65.37708,23],
+					[-24.2571,-65.33913000000001,25],
+					[-24.25333,-65.12948,35],
+					[-24.24792,-65.13504,45],
+					[-24.24675,-65.37227,23],
+					[-24.24361,-65.14799000000001,33],
+					[-24.24231,-65.09836,66],
+					[-24.23825,-65.34939,34],
+					[-24.23677,-65.18314000000001,23],
+					[-24.21816,-65.20794000000001,15],
+					[-24.195970000000003,-65.24128,46],
+					[-24.18901,-65.22723,56],
+					[-24.17343,-65.48265,43],
+					[-24.16982,-65.33171999999999,23],
+					[-24.15447,-65.37066,33],
+					[-24.15437,-65.37111999999999,46],
+					[-24.12197,-65.42636,45],
+					[-24.12183,-65.46471,32],
+					[-24.06922,-65.41284,43],
+					[-24.04591,-65.42659,35],
+					[-23.62789,-64.91669,36],
+					[-23.363310000000002,-65.34121999999999,54],
+					[-23.699170000000002,-65.53492,32],
+					[-23.68982,-65.56364,23],
+					[-23.66667,-65.58333,55],
+					[-23.62461,-65.40876,23],
+					[-23.601370000000003,-65.40619000000001,25],
+					[-23.588060000000002,-65.3675,35],
+					[-23.57695,-65.3934,45],
+					[-23.56309,-65.36174,23],
+					[-23.3661,-65.36711,33],
+					[-23.2052,-65.34398,66],
+					[-23.670939999999998,-65.58801,34],
+					[-23.816110000000002,-64.71472,23],
+					[-23.5826,-64.65769,15],
+					[-24.471339999999998,-65.17314,46],
+					[-24.35845,-65.30215,56],
+					[-24.344910000000002,-65.28886,43],
+					[-24.33186,-65.04954000000001,23],
+					[-24.32216,-65.06204,33],
+					[-24.30978,-65.31282,46],
+					[-24.30797,-65.35474,45],
+					[-24.26419,-64.43075999999999,32],
+					[-24.262829999999997,-64.31125,43],
+					[-24.24203,-65.0204,35],
+					[-24.23988,-65.08208,36],
+					[-24.20363,-64.30082,54],
+					[-24.1655,-65.48002,32],
+					[-24.147,-65.46903,23],
+					[-24.14584,-65.29514,55],
+					[-24.14256,-64.39865999999999,23],
+					[-24.122889999999998,-65.50149,25],
+					[-24.11842,-65.48028000000001,35],
+					[-24.11488,-65.48496999999999,45],
+					[-24.09812,-64.42968,23],
+					[-24.09672,-64.3989,33],
+					[-24.08387,-65.16467,66],
+					[-24.08371,-65.17296,34],
+					[-24.07493,-65.14509,23],
+					[-24.06729,-65.13932,15],
+					[-24.02337,-65.38985,46],
+					[-24.02024,-65.25256,56],
+					[-24.01908,-65.39114000000001,43],
+					[-24.00629,-65.3532,23],
+					[-24.00615,-65.35172,33],
+					[-24.00379,-65.36457,46],
+					[-24.00354,-65.36405,45],
+					[-23.97474,-65.24595,32],
+					[-23.95296,-65.29867,43],
+					[-23.95178,-65.24636,35],
+					[-23.92589,-65.25364,36],
+					[-23.90792,-64.93835,54],
+					[-23.85858,-65.09071,32],
+					[-23.76185,-64.85079,23],
+					[-23.759120000000003,-64.84909,55],
+					[-23.75473,-64.84978000000001,23],
+					[-23.74127,-64.8577,25],
+					[-23.70386,-64.78062,35],
+					[-23.70366,-64.78069,45],
+					[-23.70068,-64.87215,23],
+					[-23.699089999999998,-64.87366,33],
+					[-23.69376,-64.86792,66],
+					[-23.690279999999998,-64.87625,34],
+					[-23.6841,-64.89433000000001,23],
+					[-23.683000000000003,-64.88811,15],
+					[-23.68212,-64.90122,46],
+					[-23.68121,-64.90137,56],
+					[-23.67819,-64.92702,43],
+					[-23.67694,-64.93276999999999,23],
+					[-23.67566,-64.89884,33],
+					[-23.675639999999998,-64.89768000000001,46],
+					[-23.67464,-64.90505,45],
+					[-23.67238,-64.88606999999999,32],
+					[-23.67224,-64.87919000000001,43],
+					[-23.6512,-64.53126,35],
+					[-23.64996,-64.53322,36],
+					[-23.64976,-64.59326,54],
+					[-23.64961,-64.58594000000001,32],
+					[-23.64781,-64.93632,23],
+					[-23.645570000000003,-64.59221,55],
+					[-23.64472,-64.6044,23],
+					[-23.64367,-64.59914,25],
+					[-23.64262,-64.6014,35],
+					[-23.642429999999997,-64.60158,45],
+					[-23.64215,-64.59751,23],
+					[-23.63775,-64.54565,33],
+					[-23.637320000000003,-64.60811,66],
+					[-23.634610000000002,-64.54565,34],
+					[-23.63331,-64.94291,23],
+					[-23.631339999999998,-64.6014,15],
+					[-23.627,-64.59968,46],
+					[-23.626089999999998,-64.93496999999999,56],
+					[-23.62505,-64.95586,43],
+					[-23.62356,-64.92109,23],
+					[-23.59168,-64.97379000000001,33],
+					[-23.5604,-64.9578,46],
+					[-23.556279999999997,-64.96425,45],
+					[-23.515620000000002,-64.62286999999999,32],
+					[-23.47433,-64.95145,43],
+					[-23.47351,-64.94627,35],
+					[-24.00584,-65.35664,36],
+					[-24.495179999999998,-65.30604,54],
+					[-24.390179999999997,-65.3649,32],
+					[-24.32672,-65.42985999999999,23],
+					[-24.31389,-64.96879,55],
+					[-24.30686,-64.5042,23],
+					[-24.301389999999998,-64.49389000000001,25],
+					[-24.299020000000002,-64.38453,35],
+					[-24.236179999999997,-64.44748,45],
+					[-24.201529999999998,-64.40318,23],
+					[-24.1439,-65.39285,33],
+					[-24.12797,-65.48779,66],
+					[-24.09136,-65.1755,34],
+					[-24.07855,-65.42833,23],
+					[-24.075,-65.14333,15],
+					[-24.07306,-65.45583,46],
+					[-24.03344,-65.11164000000001,56],
+					[-23.991329999999998,-65.31676999999999,43],
+					[-23.990370000000002,-65.30823000000001,23],
+					[-23.972820000000002,-65.30768,33],
+					[-23.95164,-65.50033,46],
+					[-23.9175,-65.46568,45],
+					[-23.85624,-64.44459,32],
+					[-23.758770000000002,-64.84924000000001,43],
+					[-23.74671,-65.21349000000001,35],
+					[-23.735570000000003,-64.85061,36],
+					[-23.73386,-64.59558,54],
+					[-23.7292,-65.1789,32],
+					[-23.68206,-64.90156,23],
+					[-23.64682,-64.59121999999999,55],
+					[-23.62818,-64.45563,23],
+					[-23.6239,-64.91421,33],
+					[-23.6223,-64.95373000000001,66],
+					[-23.60667,-64.95778,34],
+					[-23.585829999999998,-64.50361,23],
+					[-23.55472,-64.52333,15],
+					[-23.93028,-65.81028,46],
+					[-23.92389,-65.81444,56],
+					[-23.92389,-65.81416999999999,43],
+					[-22.48444,-66.35014,23],
+					[-23.40111,-66.36139,33],
+					[-23.187920000000002,-66.50075,46],
+					[-23.028470000000002,-66.40671999999999,45],
+					[-23.187920000000002,-66.50072,32],
+					[-24.00379,-65.36459,43],
+					[-24.26708,-64.43948,35],
+					[-23.952779999999997,-65.29861,36],
+					[-24.09972,-65.14333,54],
+					[-23.95167,-65.24611,32],
+					[-24.09667,-64.39889000000001,23],
+					[-24.26278,-64.31111,55],
+					[-23.363329999999998,-65.34111,23],
+					[-22.73987,-65.82131,25],
+					[-22.71718,-65.97232,35],
+					[-22.70719,-66.05492,45],
+					[-22.68315,-66.13497,23],
+					[-22.532220000000002,-66.08903000000001,33],
+					[-22.58665,-65.86062,66],
+					[-22.46167,-66.62805999999999,34],
+					[-21.95107,-66.05242,23],
+					[-21.86819,-66.11885,15],
+					[-22.3207,-65.96271,46],
+					[-22.409879999999998,-65.98447,56],
+					[-22.31096,-66.0277,43],
+					[-23.32078,-65.97283,23],
+					[-23.71121,-64.5392,33],
+					[-23.75214,-64.85009000000001,46]
+				], {radius: 25});
+		heatverte;
+		
+        //ESRI ArcGIS layers from Hawaii GIS Program; dynamic layer example
+        //Using a relative url to call layer instead of http
+        var WaterQualSites = L.esri.dynamicMapLayer({
+            url: '//geodata.hawaii.gov/arcgis/rest/services/HumanHealthSafety/MapServer',
+            layers: [2],
+            useCors: false
+        });
+
+        //add popup to Water quality sites dynamic map layer
+        WaterQualSites.bindPopup(function(error, featureCollection) {
+            if (error || featureCollection.features.length === 0) {
+                return false;
+            } else {
+                return 'Name: ' + featureCollection.features[0].properties.name + '<br>' + 'ID: ' + featureCollection.features[0].properties.identifier;
+            }
+        });
+
+        //ESRI ArcGIS layers from Hawaii GIS Program; polygon feature layer example
+        //Using a relative url to call layer instead of http
+        var AgBaseline = L.esri.featureLayer({
+            url: '//geodata.hawaii.gov/arcgis/rest/services/LandUseLandCover/MapServer/4',
+            style: function(feature) {
+                return {
+                    fillOpacity: 0.2
+                }
+            }
+        });
+
+        //add popup to AgBaseline feature layer
+        AgBaseline.bindPopup(function(evt) {
+            return L.Util.template('<p>{cropcatego}<br>{island}</p>', evt.feature.properties);
+        });
+
+        //ESRI ArcGIS layers from Hawaii GIS Program; line feature layer example; can override the styling
+        //Using a relative url to call layer
+        var Trails = L.esri.featureLayer({
+            url: '//geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/34',
+            style: function(feature) {
+                return {
+                    color: '#328000',
+                    weight: 2
+                }
+            }
+        });
+
+        //PacIOOS GeoServer Example; adding a single layer with properties
+        //Using a relative url to call layer instead of http
+        var EconSeaLevRise = L.tileLayer.wms('http://geo.pacioos.hawaii.edu/geoserver/wms?', {
+            layers: 'PACIOOS:hi_tt_all_slrxa_econ_2030',
+            format: 'image/png',
+            opacity: 0.2,
+            tiled: 'true'
+        });
+
+        //Another example using PacIOOS GeoServer examples; setting properties first then add layers     
+        var options = {
+            transparent: 'true',
+            format: 'image/png',
+            opacity: 0.2,
+            tiled: 'true'
+            //info_format: 'text/html'
+        };
+
+        //Using a relative url to call layer instead of http
+        var source = L.WMS.source('http://geo.pacioos.hawaii.edu/geoserver/wms?', options);
+        var CREDREASites = source.getLayer('PACIOOS:hi_cred_all_rea_sites');
+        var VegShoreline = source.getLayer('PACIOOS:hi_hcgg_all_shore_veg');
+
+        //Load OSM Buildings then disable it on first load; can only be viewed at certain scales
+        var osmb = new OSMBuildings(map).load();
+        map.removeLayer(osmb);
+		
+//-------------------- PROVINCIA DE JUJUY -----------------------
+
+		// Set style function that sets fill color property
+		function style(feature) {
+			return {
+				fillColor: 'lightblue',
+				fillOpacity: 0.5,
+				weight: 0.5,
+				opacity: 0.5,
+				color: '#ADD8E6',
+				dashArray: '1'
+			};
+		}
+			var highlight = {
+				'fillColor': 'lightblue',
+				'weight': 0.5,
+				'opacity': 1
+			};
+
+				function forEachFeature(feature, layer) {
+
+					var popupContent= "<p><b>LIMITES : </b>"+ feature.properties.SUBECOREGION +
+					'<br>'+"<b>AREA : </b>"+feature.properties.AREAKM2 +'</p>';
+
+					layer.bindPopup(popupContent);
+
+					layer.on("click", function (e) {
+						stateLayer.setStyle(style); //resets layer colors
+						layer.setStyle(highlight);  //highlights selected.
+					});
+				}
+
+		// Null variable that will hold layer
+		var stateLayer = L.geoJson(null, {onEachFeature: forEachFeature, style: style});
+
+			$.getJSON(url_jujuy, function(data) {
+				stateLayer.addData(data);
+			});
+
+		 stateLayer;
+
+//------------------- PROVINCIA JUJUY FIN ------------------------------------------		
+	
+//------------------- ECORREGION PUNA ----------------------------------------------		
+		// Set style function that sets fill color property
+		function stylePUNA(feature) {
+			return {
+				fillColor: 'red',
+				fillOpacity: 0.5,
+				weight: 0.5,
+				opacity: 1,
+				color: '#FF0000',
+				dashArray: '1'
+			};
+		}
+		var highlightPUNA = {
+				'fillColor': 'red',
+				'weight': 0.5,
+				'opacity': 1
+			};
+	
+		//"properties":{"INECOAID":"00","ECORREGION":"Provincia de JUJUY Limtes y Ecorregiones-","PORCENTAJE":"3.67","AREA":"49.298.000 M2"}
+
+		function forEachFeaturePUNA(feature, layer) {
+
+			var popupContentPUNA= "<p><b>SUBECORREGION : </b>"+ feature.properties.SUBECOREGION +
+			'<br>'+"<b>AREA : </b>"+feature.properties.AREAKM2 +'</p>';
+			
+			layer.bindPopup(popupContentPUNA);
+
+			layer.on("click", function (e) {
+				stateLayer.setStyle(stylePUNA); //resets layer colors
+				layer.setStyle(highlightPUNA);  //highlights selected.
+			});
+		}
+
+			// Null variable that will hold layer
+		var stateLayerPUNA = L.geoJson(null, {onEachFeature: forEachFeaturePUNA, style: stylePUNA});
+
+		$.getJSON(url_puna, function(data) {
+			stateLayerPUNA.addData(data);
+		});
+
+		stateLayerPUNA.addTo(map);
+		
+//------------------- ECORREGION PUNA FIN ----------------------------------------------		
+
+//-------------------- ECORREGION ANDES -----------------------
+
+		// Set style function that sets fill color property
+		function styleANDES(feature) {
+			return {
+				fillColor: 'yellow',
+				fillOpacity: 0.5,
+				weight: 0.5,
+				opacity: 0.5,
+				color: '#ffff00',
+				dashArray: '1'
+			};
+		}
+			var highlightANDES = {
+				'fillColor': 'yellow',
+				'weight': 0.5,
+				'opacity': 1
+			};
+
+				function forEachFeatureANDES(feature, layer) {
+
+					var popupContentANDES= "<p><b>SUBECORREGION : </b>"+ feature.properties.SUBECOREGION +					
+					'<br>'+"<b>AREA : </b>"+ feature.properties.AREAKM2 +'</p>';
+
+					layer.bindPopup(popupContentANDES);
+
+					layer.on("click", function (e) {
+						stateLayer.setStyle(styleANDES); //resets layer colors
+						layer.setStyle(highlightANDES);  //highlights selected.
+					});
+				}
+
+		// Null variable that will hold layer
+		var stateLayerANDES = L.geoJson(null, {onEachFeature: forEachFeatureANDES, style: styleANDES});
+
+			$.getJSON(url_andes, function(data) {
+				stateLayerANDES.addData(data);
+			});
+
+		stateLayerANDES.addTo(map);
+
+//------------------- ECORREGION ANDES FIN ----------------------------------------------
+
+//-------------------- ECORREGION YUNGAS -----------------------
+
+		// Set style function that sets fill color property
+		function styleYUNGAS(feature) {
+			return {
+				fillColor: 'lime',
+				fillOpacity: 0.5,
+				weight: 0.5,
+				opacity: 0.5,
+				color: '#00FF00',
+				dashArray: '1'
+			};
+		}
+			var highlightYUNGAS = {
+				'fillColor': 'lime',
+				'weight': 0.5,
+				'opacity': 1
+			};
+
+				function forEachFeatureYUNGAS(feature, layer) {
+
+					var popupContentYUNGAS = "<p><b>SUBECORREGION : </b>"+ feature.properties.SUBECOREGION +					
+					'<br>'+"<b>AREA : </b>"+feature.properties.AREAKM2 +'</p>';
+
+					layer.bindPopup(popupContentYUNGAS);
+
+					layer.on("click", function (e) {
+						stateLayer.setStyle(styleYUNGAS); //resets layer colors
+						layer.setStyle(highlightYUNGAS);  //highlights selected.
+					});
+				}
+
+		// Null variable that will hold layer
+		var stateLayerYUNGAS = L.geoJson(null, {onEachFeature: forEachFeatureYUNGAS, style: styleYUNGAS});
+
+			$.getJSON(url_yungas, function(data) {
+				stateLayerYUNGAS.addData(data);
+			});
+
+		stateLayerYUNGAS.addTo(map);
+
+//------------------- ECORREGION YUNGAS FIN ----------------------------------------------
+
+
+//-------------------- ECORREGION CHACO SECO -----------------------
+
+		// Set style function that sets fill color property
+		function styleCHACOS(feature) {
+			return {
+				fillColor: 'orange',
+				fillOpacity: 0.5,
+				weight: 0.5,
+				opacity: 0.5,
+				color: '#ffA500',
+				dashArray: '1'
+			};
+		}
+			var highlightCHACOS = {
+				'fillColor': 'orange',
+				'weight': 0.5,
+				'opacity': 1
+			};
+
+				function forEachFeatureCHACOS(feature, layer) {
+
+					var popupContentCHACOS= "<p><b>SUBECORREGION : </b>"+ feature.properties.SUBECOREGION +					
+					'<br>'+"<b>AREA : </b>"+ feature.properties.AREAKM2 +'</p>';
+
+					layer.bindPopup(popupContentCHACOS);
+
+					layer.on("click", function (e) {
+						stateLayer.setStyle(styleCHACOS); //resets layer colors
+						layer.setStyle(highlightCHACOS);  //highlights selected.
+					});
+				}
+
+		// Null variable that will hold layer
+		var stateLayerCHACOS = L.geoJson(null, {onEachFeature: forEachFeatureCHACOS, style: styleCHACOS});
+
+			$.getJSON(url_chacos, function(data) {
+				stateLayerCHACOS.addData(data);
+			});
+
+		stateLayerCHACOS.addTo(map);
+
+//------------------- ECORREGION CHACO SECO FIN ----------------------------------------------
+
+//-------------------- ECORREGION MONTE SIERRAS BOLSONES -----------------------
+
+		// Set style function that sets fill color property
+		function styleMSB(feature) {
+			return {
+				fillColor: 'darkgreen',
+				fillOpacity: 0.5,
+				weight: 0.5,
+				opacity: 0.5,
+				color: '#006400',
+				dashArray: '1'
+			};
+		}
+			var highlightMSB = {
+				'fillColor': 'darkgreen',
+				'weight': 0.5,
+				'opacity': 1
+			};
+
+				function forEachFeatureMSB(feature, layer) {
+
+					var popupContentMSB= "<p><b>SUBECORREGION : </b>"+ feature.properties.SUBECOREGION +					
+					'<br>'+"<b>AREA : </b>"+feature.properties.AREAKM2 +'</p>';
+
+					layer.bindPopup(popupContentMSB);
+
+					layer.on("click", function (e) {
+						stateLayer.setStyle(styleMSB); //resets layer colors
+						layer.setStyle(highlightMSB);  //highlights selected.
+					});
+				}
+
+		// Null variable that will hold layer
+		var stateLayerMSB = L.geoJson(null, {onEachFeature: forEachFeatureMSB, style: styleMSB});
+
+			$.getJSON(url_msb, function(data) {
+				stateLayerMSB.addData(data);
+			});
+
+		stateLayerMSB.addTo(map);
+
+//------------------- ECORREGION MONTE SIERRAS BOLSONES FIN ----------------------------------------------
+
+//-----------------------------------------------------------------------------
+
+		/* Larger screens get expanded layer control and visible sidebar */
+		if (document.body.clientHeight <= 767) {
+			  var isCollapsed = true;
+			} else {
+			  var isCollapsed = false;
+			}
+			
+		//Overlay grouped layers    
+        var groupOverLays = {		
+		
+			"ECORREGIONES": {
+						"PUNA": stateLayerPUNA,
+						"ALTOS ANDES": stateLayerANDES,
+						"MONTES SIERRAS BOLSONES": stateLayerMSB,
+						"SELVA de YUNGAS": stateLayerYUNGAS,
+						"CHACO SECO": stateLayerCHACOS,
+						"Provincia de Jujuy (Limites)": stateLayer
+					},
+            "BIOTA": {
+                "Vertebrados (236)": MCBiotaVertebrados,
+				"Mapa de Calor Vertebrados": heatverte,
+                "Invertebrados (14)": MCBiotaINVertebrados,
+				"Protistas (42)": MCBiotaProtistas,
+				"Hongos (20)": MCBiotaHongos,				
+                "Plantas (56)": MCBiotaPlantas
+            },
+
+            "CLIMA y METEOROLOGIA": {
+                "Condiciones del Clima": EconSeaLevRise
+            },
+
+            "GEOGRAFIA FISICA": {
+				"Geomorfologia": EconSeaLevRise,
+				"Edafologia": EconSeaLevRise,
+				"Vulcanismo y Sismicidad": EconSeaLevRise,
+				"Glaciologia": EconSeaLevRise,
+				"Geologia": EconSeaLevRise,
+                "Degradacion de Tierras y Desertificacion": osmb
+            },
+			
+			"HIDROGRAFIA": {
+                "Aguas Continentales": EconSeaLevRise,
+                "Aguas Subterraneas": VegShoreline
+            },
+			
+			"ARQUEOLOGIA": {
+                "Aleros": EconSeaLevRise,
+                "Arte Rupestre": CREDREASites,
+				"Campos Agricolas": CREDREASites,
+                "Poblados PreHispanicos": VegShoreline
+            },
+			"INFORMACION de BASE": {
+                "Limites Politicos": EconSeaLevRise,
+				"Poblaciones": EconSeaLevRise,
+				"Red Vial": EconSeaLevRise,
+				"Hidrografia": EconSeaLevRise,
+				"Ecoregiones": EconSeaLevRise,
+				"Areas Protegidas": EconSeaLevRise,
+				"Uso de Suelo": EconSeaLevRise,
+                "OTBN Jujuy": VegShoreline
+            },
+        };			
+		
+        //add layer switch control
+        L.control.groupedLayers(baseLayers, groupOverLays, {collapsed: isCollapsed}).addTo(map);
+
+        //add scale bar to map
+        L.control.scale({
+            position: 'bottomleft'
+        }).addTo(map);
+		
+		// Overview mini map
+        var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '&copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+        });
+
+        var miniMap = new L.Control.MiniMap(Esri_WorldTopoMap, {
+            toggleDisplay: true,
+            minimized: false,
+            position: 'bottomleft'
+        }).addTo(map);
+						
+        //define Drawing toolbar options
+        var options = {
+            position: 'topleft', // toolbar position, options are 'topleft', 'topright', 'bottomleft', 'bottomright'
+            drawMarker: true, // adds button to draw markers
+            drawPolyline: true, // adds button to draw a polyline
+            drawRectangle: true, // adds button to draw a rectangle
+            drawPolygon: true, // adds button to draw a polygon
+            drawCircle: true, // adds button to draw a cricle
+            cutPolygon: true, // adds button to cut a hole in a polygon
+            editMode: true, // adds button to toggle edit mode for all layers
+            removalMode: true, // adds a button to remove layers
+        };
+
+        // add leaflet.pm controls to the map
+        map.pm.addControls(options);
+
+        //Logo position: bottomright
+        var credctrl = L.controlCredits({
+            image: "images/opengislab_106x23.png",
+            link: "https://www.opengislab.com/",
+            text: "Leaflet map example by Stephanie @ <u>opengislab.com<u/>"
+        }).addTo(map);
+		
+		<!-- //Logo position: bottomright -->
+        <!-- var credctrlINECOA = L.controlCredits({ -->
+            <!-- image: "images/INECOA_logo_header.png", -->
+            <!-- link: "https://inecoa-unju.conicet.gov.ar", -->
+            <!-- text: "INECOA CONICET UNJU @ <u>inecoa@conicet.gov.ar<u/>" -->
+        <!-- }).addTo(map); -->
+		
+		// Buscador Interno INECOA
+		
+		//Buscador interno visor
+		 
+		var searchCtrl = L.control.fuseSearch({
+						position:'topright',
+						title:'Busqueda',
+						placeholder:'Busqueda'
+						})
+			searchCtrl.addTo(map);
+			
+		// Logo INECOA
+		
+		//Logo INECOA en Marca de Agua
+		L.Control.Watermark = L.Control.extend({
+			onAdd: function(map) {
+				var img = L.DomUtil.create('img');
+
+				img.src = 'images/INECOA_logo_header.png';
+				img.style.width = '113px';
+
+				return img;
+			},
+
+			onRemove: function(map) {
+				// Nothing to do here
+			}
+		});
+
+		L.control.watermark = function(opts) {
+			return new L.Control.Watermark(opts);
+		}
+
+		L.control.watermark({ position: 'topright' }).addTo(map);
+		//L.control.watermark({ position: 'topleft' }).addTo(map);
+										
+									
+    </script>
+
+</body>
+
+</html>

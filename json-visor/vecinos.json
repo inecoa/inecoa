@@ -1,0 +1,5 @@
+{"type":"FeatureCollection", "features": [
+	{"type":"Feature","geometry":{"type":"Point","coordinates":[-60.69440315176775,-31.637602967743867]},"properties":{"id":1,"punto":"punto1924","titulo":"ALGAS VERDES Y EUGLENIDOS","descripcon":"LAGUNA POZUELOS","institucion":"INECOA - CONICET - UNJU","ecorregion":"ALTO ANDES","altura":"4400","url":"http://www.lillo.org.ar/revis/lilloa/2017/v54n2/lilloa-v54n2a11.pdf"}},
+	{"type":"Feature","geometry":{"type":"Point","coordinates":[-60.69419026517629,-31.63766801642459]},"properties":{"id":2,"punto":"punto1925","titulo":"CIANOBACTERIAS","descripcon":"LAGUNA RUNTUYOC","institucion":"LILLO - CONICET - UNT","ecorregion":"ALTO ANDES","altura":"3800","url":"http://www.lillo.org.ar/revis/lilloa/2017/v54n2/lilloa-v54n2a11.pdf"}},
+	{"type":"Feature","geometry":{"type":"Point","coordinates":[-60.69483483846711,-31.638717665590832]},"properties":{"id":3,"punto":"punto1926","titulo":"DIATOMEAS","descripcon":"LAGUNA CERRO NEGRO","institucion":"IBBEA - CONICET - UBA","ecorregion":"ALTO ANDES","altura":"4100","url":"http://www.lillo.org.ar/revis/lilloa/2017/v54n2/lilloa-v54n2a11.pdf"}}
+]}
